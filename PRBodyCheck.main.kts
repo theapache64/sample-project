@@ -4,7 +4,6 @@ import java.io.File
 
 main()
 fun main() {
-
     val isDebug = true
     var prBody: String? = System.getenv("PR_BODY")
     prBody = if (prBody == null && isDebug) {
@@ -14,12 +13,7 @@ fun main() {
         ## PR Type
         Please keep the type of change your PR introduces and remove others
         - FEATURE - Addition of functionality
-        - BUG FIX - Fixes existing functionality
-        - CODE REFACTOR & CLEANUP - Removing unused configurations or code cleaning
-        - PERF - Performance improvement
-        - TESTS - Only contains changes and additions to tests
-        - RELEASE - App version upgrade etc.
-        - OTHER - README update, PR template update, etc
+
         ## PR Checks
         Please add a comment `run test` to run maestro and UI tests. Check [here](https://my-company.slack.com/archives/C01SUJ1CDFF/p1684930174247179) for more details
         ## Why more than 500 lines of code?
@@ -63,15 +57,32 @@ fun main() {
 
     if (prBody.isNullOrEmpty()) {
         error("prBody is emptyOrNull -> '$prBody'")
-        return
     }
 
-    val prTemplate = File(".github/PULL_REQUEST_TEMPLATE.md").readText().trim()
+    val prTemplate = File(".github/PULL_REQUEST_TEMPLATE.md").readText()
     val errorBuilder = StringBuilder()
-    val prTypeValue = getSectionWithoutHeading(prBody, "PR Type")
-    println("QuickTag: :main: '$prTypeValue'")
-}
 
+    // Validating PR type section
+    val prTypeValue = getSectionWithoutHeading(prBody, "PR Type")
+    if (prTypeValue == null) {
+        errorBuilder.append("- 'PR Type' section is missing from PR body\n")
+    } else {
+        val selectedPrTypesCount = prTypeValue
+            .lines()
+            .filter { it.startsWith("- ") }
+            .size
+
+        if (selectedPrTypesCount != 1) {
+            errorBuilder.append("- $selectedPrTypesCount PR type found, expected only 1")
+        }
+    }
+
+    if (errorBuilder.isNotEmpty()) {
+        error(errorBuilder)
+    } else {
+        println("✅ Good PR body!")
+    }
+}
 
 fun getSectionWithoutHeading(prBody: String, heading: String): String? {
     val headingPattern = "^##".toRegex(setOf(RegexOption.MULTILINE))
@@ -83,6 +94,7 @@ fun getSectionWithoutHeading(prBody: String, heading: String): String? {
             sectionHeading == heading
         }
         ?.lines()
-        ?.drop(1)
+        ?.drop(1) // drop heading
         ?.joinToString(separator = "\n")
+        ?.trim()
 }
