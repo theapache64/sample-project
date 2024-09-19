@@ -3,7 +3,7 @@
 import java.io.File
 
 val isDebug = true
-var prBody : String? = System.getenv("GITHUB_ACCESS_TOKEN")
+var prBody: String? = System.getenv("GITHUB_ACCESS_TOKEN")
 prBody = if (prBody == null && isDebug) {
     println("Providing dummy PR body...")
     """
@@ -20,10 +20,13 @@ prBody = if (prBody == null && isDebug) {
 
         ## PR Checks
         Please add a comment `run test` to run maestro and UI tests. Check [here](https://my-company.slack.com/archives/C01SUJ1CDFF/p1684930174247179) for more details
-        - something 
 
         ## Why more than 500 lines of code?
-        this is my reason
+        <!-- 
+        Please explain why your PR is more than 500 lines of code. 
+        Sample : https://github.com/my-company/my-company-android-mobile/pull/5833
+        Remove this section if your PR is less than 500 lines of code. 
+        -->
 
         ## Description
         <!-- Please explain your changes -->
@@ -64,13 +67,15 @@ prBody = if (prBody == null && isDebug) {
     """.trimIndent()
 } else {
     prBody
-}
+}?.trim()
 
 if (prBody.isNullOrEmpty()) {
     error("prBody is emptyOrNull -> '$prBody'")
 }
 
-val prTemplate = File(".github/PULL_REQUEST_TEMPLATE.md")
-prTemplate.readText().also {
-    println(it)
+val prTemplate = File(".github/PULL_REQUEST_TEMPLATE.md").readText().trim()
+val errorBuilder = StringBuilder()
+
+if (prTemplate == prBody){
+    error("PR template is unfilled. Please fill it properly before asking for a review.")
 }
