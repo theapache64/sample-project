@@ -3,7 +3,7 @@
 import java.io.File
 
 val isDebug = true
-var prBody: String? = System.getenv("GITHUB_ACCESS_TOKEN")
+var prBody: String? = System.getenv("PR_BODY")
 prBody = if (prBody == null && isDebug) {
     println("Providing dummy PR body...")
     """
