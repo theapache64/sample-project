@@ -1,4 +1,4 @@
-name: PR Check
+name: PR Body Validator
 
 on:
   pull_request:
