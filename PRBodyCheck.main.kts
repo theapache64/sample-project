@@ -81,3 +81,5 @@ println("QuickTag: prTemplate.length == ${prTemplate.length} and prBody.length =
 if (prTemplate == prBody){
     error("PR template is unfilled. Please fill it properly before asking for a review.")
 }
+
+println("QuickTag:prBody is '$prBody' ")
