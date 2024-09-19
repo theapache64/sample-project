@@ -2,4 +2,4 @@
 
 import java.io.File
 
-println("Hello from Kotlin script !${args.firstOrNull()}!")
+println("Hello from Kotlin script !${System.getenv("PR_BODY")}!")
