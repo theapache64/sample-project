@@ -4,6 +4,7 @@ import java.io.File
 
 val isDebug = true
 var prBody: String? = System.getenv("PR_BODY")
+println("QuickTag: :hello: ")
 prBody = if (prBody == null && isDebug) {
     println("Providing dummy PR body...")
     """
