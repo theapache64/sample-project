@@ -1,1 +1,2 @@
 i am a new feature
+i am the second addition to the feature
