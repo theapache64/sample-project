@@ -1,0 +1,17 @@
+name: PR Body Validator
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]  # Trigger on PR creation and editing
+
+
+jobs:
+  pr-body-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run custom check
+        run: kotlinc -script ./PRBodyCheck.main.kts "${{ github.event.pull_request.body }}"
