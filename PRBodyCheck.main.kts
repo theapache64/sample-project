@@ -4,7 +4,7 @@ import java.io.File
 
 val isDebug = true
 var prBody: String? = System.getenv("PR_BODY")
-println("QuickTag: :hello from feature ")
+
 prBody = if (prBody == null && isDebug) {
     println("Providing dummy PR body...")
     """
@@ -77,6 +77,7 @@ if (prBody.isNullOrEmpty()) {
 val prTemplate = File(".github/PULL_REQUEST_TEMPLATE.md").readText().trim()
 val errorBuilder = StringBuilder()
 
+println("QuickTag: prTemplate.length == ${prTemplate.length} and prBody.length == ${prBody?.length} ")
 if (prTemplate == prBody){
     error("PR template is unfilled. Please fill it properly before asking for a review.")
 }
