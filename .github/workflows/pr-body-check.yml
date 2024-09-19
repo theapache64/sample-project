@@ -12,8 +12,8 @@ jobs:
     steps:
       - name: Checkout master branch
         uses: actions/checkout@v3
-        with:
-          ref: master
+#        with:
+#          ref: master
 
       - name: Run custom check
         env:
