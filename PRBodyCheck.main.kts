@@ -2,4 +2,4 @@
 
 import java.io.File
 
-println("Hello from Kotlin script!")
+println("Hello from Kotlin script !${args.firstOrNull()}!")
