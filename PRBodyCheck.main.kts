@@ -65,7 +65,7 @@ fun main() {
     // Validating PR type section
     val prTypeValue = getSectionWithoutHeading(prBody, "PR Type")
     if (prTypeValue == null) {
-        errorBuilder.append("- 'PR Type' section is missing from PR body\n")
+        errorBuilder.appendSectionMissing("PR Type")
     } else {
         val selectedPrTypesCount = prTypeValue
             .lines()
@@ -74,6 +74,23 @@ fun main() {
 
         if (selectedPrTypesCount != 1) {
             errorBuilder.append("- $selectedPrTypesCount PR type found, expected only 1")
+        }
+    }
+
+    // Validating mandatory PR checklist item
+    val checkListValue = getSectionWithoutHeading(prBody, "Checklist")
+    if (checkListValue == null) {
+        errorBuilder.appendSectionMissing("Checklist")
+    } else {
+        val mandatoryItems = checkListValue
+            .lines()
+            .map { line -> line.trim() }
+            .filter { line -> line.endsWith("(mandatory)") }
+
+        for(mandatoryItem in mandatoryItems){
+            if(!mandatoryItem.startsWith("- [x]")){
+                errorBuilder.append("- Checklist mandatory item not checked properly: ($mandatoryItem)")
+            }
         }
     }
 
@@ -97,4 +114,8 @@ fun getSectionWithoutHeading(prBody: String, heading: String): String? {
         ?.drop(1) // drop heading
         ?.joinToString(separator = "\n")
         ?.trim()
+}
+
+fun java.lang.StringBuilder.appendSectionMissing(heading: String): java.lang.StringBuilder {
+    return append("- '$heading' section is missing from PR body\n")
 }
