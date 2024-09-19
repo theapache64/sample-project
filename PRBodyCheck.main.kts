@@ -2,4 +2,4 @@
 
 import java.io.File
 
-println("Hello World!")
+println("Hello from Kotlin script!")
