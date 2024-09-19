@@ -4,25 +4,7 @@ import java.io.File
 
 val isDebug = true
 var prBody: String? = System.getenv("PR_BODY")
-prBody = if (prBody == null && isDebug) {
-    println("Providing dummy PR body...")
-    """
-        <!-- Comment on this document to propose changes: https://my-company.atlassian.net/wiki/spaces/HP2/pages/1588396037/Github+PR+template --> 
-        ## PR Type
-        Please keep the type of change your PR introduces and remove others
-        - FEATURE - Addition of functionality
-        - BUG FIX - Fixes existing functionality
-        - CODE REFACTOR & CLEANUP - Removing unused configurations or code cleaning
-        - PERF - Performance improvement
-        - TESTS - Only contains changes and additions to tests
-        - RELEASE - App version upgrade etc.
-        - OTHER - README update, PR template update, etc
-
-        ## PR Checks
-        Please add a comment `run test` to run maestro and UI tests. Check [here](https://my-company.slack.com/archives/C01SUJ1CDFF/p1684930174247179) for more details
-
-        ## Why more than 500 lines of code?
-        <!-- 
+prBody = if (prBo
         Please explain why your PR is more than 500 lines of code. 
         Sample : https://github.com/my-company/my-company-android-mobile/pull/5833
         Remove this section if your PR is less than 500 lines of code. 
