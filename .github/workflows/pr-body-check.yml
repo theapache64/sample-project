@@ -6,7 +6,7 @@ on:
 
 
 jobs:
-  check:
+  pr-body-check:
     runs-on: ubuntu-latest
 
     steps:
