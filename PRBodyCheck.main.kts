@@ -1,9 +1,78 @@
 #!/usr/bin/env kotlin
 
-import java.io.File
-
 main()
 fun main() {
+    val prBody = getPRBodyOrCrash()
+    val errorBuilder = StringBuilder()
+
+    // Validating PR type section
+    validatePRType(prBody, errorBuilder)
+    // Validating PR description
+    validateDescription(prBody, errorBuilder)
+    // Validating mandatory PR checklist item
+    validateMandatoryChecklistItems(prBody, errorBuilder)
+
+    if (errorBuilder.isNotEmpty()) {
+        error(errorBuilder)
+    } else {
+        println("✅ Good PR body!")
+    }
+}
+
+fun getSectionWithoutHeading(prBody: String, heading: String): String? {
+    val headingPattern = "^##".toRegex(setOf(RegexOption.MULTILINE))
+    return prBody.split(headingPattern)
+        .map { it.trim() }
+        .find { section ->
+            val secLines = section.lines()
+            val sectionHeading = secLines.firstOrNull()
+            sectionHeading == heading
+        }
+        ?.lines()
+        ?.drop(1) // drop heading
+        ?.joinToString(separator = "\n")
+        ?.trim()
+}
+
+fun java.lang.StringBuilder.appendSectionMissing(heading: String): java.lang.StringBuilder {
+    return append("- '$heading' section is missing from PR body\n")
+}
+
+fun validatePRType(prBody: String, errorBuilder: StringBuilder) {
+    val prTypeValue = getSectionWithoutHeading(prBody, "PR Type")
+    if (prTypeValue == null) {
+        errorBuilder.appendSectionMissing("PR Type")
+    } else {
+        val selectedPrTypesCount = prTypeValue
+            .lines()
+            .filter { it.startsWith("- ") }
+            .size
+
+        if (selectedPrTypesCount != 1) {
+            errorBuilder.append("- $selectedPrTypesCount PR type found, expected only 1")
+        }
+    }
+}
+
+fun validateMandatoryChecklistItems(prBody: String, errorBuilder: StringBuilder) {
+    val checkListValue = getSectionWithoutHeading(prBody, "Checklist")
+    if (checkListValue == null) {
+        errorBuilder.appendSectionMissing("Checklist")
+    } else {
+        val mandatoryItems = checkListValue
+            .lines()
+            .map { line -> line.trim() }
+            .filter { line -> line.endsWith("(mandatory)") }
+
+        for (mandatoryItem in mandatoryItems) {
+            if (!mandatoryItem.startsWith("- [x]")) {
+                errorBuilder.append("- Checklist mandatory item not checked properly: ($mandatoryItem)")
+            }
+        }
+    }
+}
+
+fun getPRBodyOrCrash(): String {
     val isDebug = true
     var prBody: String? = System.getenv("PR_BODY")
     prBody = if (prBody == null && isDebug) {
@@ -23,7 +92,8 @@ fun main() {
         Remove this section if your PR is less than 500 lines of code. 
         -->
         ## Description
-        <!-- Please explain your changes -->
+        This is sample description
+        
         ## Documents and other resources
         <!-- Link to Engineering Doc, Zeplin links, Product Doc and others -->
         ## Other Impacted Features (side effects)
@@ -32,7 +102,7 @@ fun main() {
              Subscription Paywall
              Billboard Ads -->
         ## Checklist
-        - [ ] My PR only includes one change. There are no additional changes mixed in this single PR (mandatory)
+        - [x] My PR only includes one change. There are no additional changes mixed in this single PR (mandatory)
         - [ ] I have made corresponding changes to the documentation
         - [ ] I have tested on a release build
         - [ ] I have tested this change with leak canary enabled for any leaks
@@ -59,63 +129,14 @@ fun main() {
         error("prBody is emptyOrNull -> '$prBody'")
     }
 
-    val prTemplate = File(".github/PULL_REQUEST_TEMPLATE.md").readText()
-    val errorBuilder = StringBuilder()
-
-    // Validating PR type section
-    val prTypeValue = getSectionWithoutHeading(prBody, "PR Type")
-    if (prTypeValue == null) {
-        errorBuilder.appendSectionMissing("PR Type")
-    } else {
-        val selectedPrTypesCount = prTypeValue
-            .lines()
-            .filter { it.startsWith("- ") }
-            .size
-
-        if (selectedPrTypesCount != 1) {
-            errorBuilder.append("- $selectedPrTypesCount PR type found, expected only 1")
-        }
-    }
-
-    // Validating mandatory PR checklist item
-    val checkListValue = getSectionWithoutHeading(prBody, "Checklist")
-    if (checkListValue == null) {
-        errorBuilder.appendSectionMissing("Checklist")
-    } else {
-        val mandatoryItems = checkListValue
-            .lines()
-            .map { line -> line.trim() }
-            .filter { line -> line.endsWith("(mandatory)") }
-
-        for(mandatoryItem in mandatoryItems){
-            if(!mandatoryItem.startsWith("- [x]")){
-                errorBuilder.append("- Checklist mandatory item not checked properly: ($mandatoryItem)")
-            }
-        }
-    }
-
-    if (errorBuilder.isNotEmpty()) {
-        error(errorBuilder)
-    } else {
-        println("✅ Good PR body!")
-    }
+    return prBody
 }
 
-fun getSectionWithoutHeading(prBody: String, heading: String): String? {
-    val headingPattern = "^##".toRegex(setOf(RegexOption.MULTILINE))
-    return prBody.split(headingPattern)
-        .map { it.trim() }
-        .find { section ->
-            val secLines = section.lines()
-            val sectionHeading = secLines.firstOrNull()
-            sectionHeading == heading
-        }
-        ?.lines()
-        ?.drop(1) // drop heading
-        ?.joinToString(separator = "\n")
-        ?.trim()
-}
-
-fun java.lang.StringBuilder.appendSectionMissing(heading: String): java.lang.StringBuilder {
-    return append("- '$heading' section is missing from PR body\n")
+fun validateDescription(prBody: String, errorBuilder: StringBuilder) {
+    val description = getSectionWithoutHeading(prBody, "Description")
+    if (description.isNullOrEmpty()) {
+        errorBuilder.appendSectionMissing("Description")
+    } else if (description.startsWith("<!--") && description.endsWith("-->")) {
+        errorBuilder.append("- Description looks empty - ($description)")
+    }
 }
