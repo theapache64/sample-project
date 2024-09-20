@@ -15,7 +15,7 @@ fun main() {
     if (errorBuilder.isNotEmpty()) {
         error(errorBuilder)
     } else {
-        println("✅ Good PR body!")
+        println("✅ Good PR body!!")
     }
 }
 
