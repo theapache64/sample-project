@@ -15,7 +15,7 @@ jobs:
 #          ref: master
 
       - name: Log event action
-      - run: echo "event type is:" ${{ github.event.action }}
+        run: echo "event type is:" ${{ github.event.action }}
 
       - name: Run custom check
         env:
