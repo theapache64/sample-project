@@ -1,6 +1,0 @@
-i am a new feature
-i am the second addition to the feature
-i am the third addition to the feature
-i am the fourth addition to the feature
-fifth addition
-sixth addition
