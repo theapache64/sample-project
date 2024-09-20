@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cccefded-6576-48fc-86b8-0eefd6e0a813" name="Changes" comment="sdf">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/pr-body-check.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pr-body-check.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRBodyCheck.main.kts" beforeDir="false" afterPath="$PROJECT_DIR$/PRBodyCheck.main.kts" afterDir="false" />
     </list>
@@ -59,6 +60,7 @@
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -109,7 +111,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1726762276579</updated>
-      <workItem from="1726776905565" duration="1382000" />
+      <workItem from="1726776905565" duration="4225000" />
     </task>
     <servers />
   </component>
