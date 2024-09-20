@@ -2,18 +2,6 @@
 
 main()
 fun main() {
-    val event = getArgs("event") ?: error("'event' missing from command : (${args.toList()})")
-    when(event){
-        "opened" -> {
-            // PR opened
-            onPROpened()
-        }
-
-        "edited" -> {
-            // PR description changed
-        }
-    }
-
     val prBody = getPRBodyOrCrash()
     val errorBuilder = StringBuilder()
 
@@ -153,11 +141,3 @@ fun validateDescription(prBody: String, errorBuilder: StringBuilder) {
     }
 }
 
-fun getArgs(key: String): String? {
-    TODO()
-}
-
-fun onPROpened() {
-    // Add reviewer
-
-}
