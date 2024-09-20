@@ -2,7 +2,7 @@ name: PR Body Validator
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]  # Trigger on PR creation and editing
+    types: [opened, edited]  # Trigger on PR creation and editing
 
 jobs:
   pr-body-check:
@@ -14,10 +14,7 @@ jobs:
 #        with:
 #          ref: master
 
-      - name: Log event action
-        run: echo "event type is:" ${{ github.event.action }}
-
       - name: Run custom check
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
-        run: kotlinc -script ./PRBodyCheck.main.kts
+        run: kotlinc -script ./PRBodyCheck.main.kts "${{ github.event.action }}"
