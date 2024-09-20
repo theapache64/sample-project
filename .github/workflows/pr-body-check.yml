@@ -11,8 +11,8 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
-#        with:
-#          ref: masters
+        with:
+          ref: master
 
       - name: Log event action
         run: echo "event type is:" ${{ github.event.action }}
