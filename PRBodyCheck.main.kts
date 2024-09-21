@@ -88,6 +88,9 @@ fun getPRBodyOrCrash(): String {
         ## PR Type
         Please keep the type of change your PR introduces and remove others
         - FEATURE - Addition of functionality
+        - FEATURE - Addition of functionality
+        - FEATURE - Addition of functionality
+        - FEATURE - Addition of functionality
 
         ## PR Checks
         Please add a comment `run test` to run maestro and UI tests. Check [here](https://my-company.slack.com/archives/C01SUJ1CDFF/p1684930174247179) for more details
@@ -98,7 +101,7 @@ fun getPRBodyOrCrash(): String {
         Remove this section if your PR is less than 500 lines of code. 
         -->
         ## Description
-        This is sample description
+        
         
         ## Documents and other resources
         <!-- Link to Engineering Doc, Zeplin links, Product Doc and others -->
@@ -108,7 +111,7 @@ fun getPRBodyOrCrash(): String {
              Subscription Paywall
              Billboard Ads -->
         ## Checklist
-        - [x] My PR only includes one change. There are no additional changes mixed in this single PR (mandatory)
+        - [ ] My PR only includes one change. There are no additional changes mixed in this single PR (mandatory)
         - [ ] I have made corresponding changes to the documentation
         - [ ] I have tested on a release build
         - [ ] I have tested this change with leak canary enabled for any leaks
