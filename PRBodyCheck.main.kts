@@ -19,7 +19,7 @@ fun main() {
                 separator = "\n",
                 prefix = "PR template check failed",
                 transform = { line ->
-                    "${errorList.indexOf(line) + 1} -  $line"
+                    "${errorList.indexOf(line) + 1}.  $line"
                 }
             )
         )
