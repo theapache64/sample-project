@@ -13,13 +13,12 @@ fun main() {
     validateMandatoryChecklistItems(prBody, errorList)
 
     if (errorList.isNotEmpty()) {
-        println()
         error(
             errorList.joinToString(
                 separator = "\n",
-                prefix = "PR template check failed",
+                prefix = "PR template check failed. Fix below points please\n",
                 transform = { line ->
-                    "${errorList.indexOf(line) + 1}.  $line"
+                    "- ${line.trim()}"
                 }
             )
         )
@@ -55,7 +54,7 @@ fun validatePRType(prBody: String, errorList: MutableList<String>) {
             .size
 
         if (selectedPrTypesCount != 1) {
-            errorList.add("$selectedPrTypesCount PR type found, expected only 1")
+            errorList.add("$selectedPrTypesCount PR types found, expected only 1")
         }
     }
 }
@@ -72,7 +71,7 @@ fun validateMandatoryChecklistItems(prBody: String, errorList: MutableList<Strin
 
         for (mandatoryItem in mandatoryItems) {
             if (!mandatoryItem.startsWith("- [x]")) {
-                errorList.add("Checklist mandatory item not checked properly: ($mandatoryItem)")
+                errorList.add("Checklist mandatory item not checked properly: (${mandatoryItem.truncate(30)})")
             }
         }
     }
@@ -151,5 +150,9 @@ fun validateDescription(prBody: String, errorList: MutableList<String>) {
 }
 
 fun MutableList<String>.appendSectionMissing(heading: String) {
-    add("'$heading' section is missing from PR body ")
+    add("'$heading' section is empty from PR body ")
+}
+
+fun String.truncate(max: Int): String {
+    return "${this.substring(0, kotlin.math.min(this.length, max))}..."
 }
