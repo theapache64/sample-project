@@ -2,7 +2,7 @@ name: PR Body Validator
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]  # Trigger on PR creation and editing
+    types: [opened, edited, synchronize]
 
 jobs:
   validation:
