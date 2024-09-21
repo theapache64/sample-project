@@ -3,27 +3,17 @@
 main()
 fun main() {
     val prBody = getPRBodyOrCrash()
-    val errorBuilder = StringBuilder()
+    val errorList = mutableListOf<String>()
 
     // Validating PR type section
-    validatePRType(prBody, errorBuilder)
+    validatePRType(prBody, errorList)
     // Validating PR description
-    validateDescription(prBody, errorBuilder)
+    validateDescription(prBody, errorList)
     // Validating mandatory PR checklist item
-    validateMandatoryChecklistItems(prBody, errorBuilder)
+    validateMandatoryChecklistItems(prBody, errorList)
 
-    if (errorBuilder.isNotEmpty()) {
-        println("""
-            1
-            2
-            
-            3
-            
-            
-            4
-            
-            .
-        """.trimIndent())
+    if (errorList.isNotEmpty()) {
+        println(errorList.joinToString(separator = "\n", prefix = "- "))
         error("PR body check failed. See above ☝\uFE0F")
     } else {
         println("✅ PR body looks good!!!")
@@ -45,14 +35,11 @@ fun getSectionWithoutHeading(prBody: String, heading: String): String? {
         ?.trim()
 }
 
-fun java.lang.StringBuilder.appendSectionMissing(heading: String): java.lang.StringBuilder {
-    return append("- '$heading' section is missing from PR body </br>\n")
-}
 
-fun validatePRType(prBody: String, errorBuilder: StringBuilder) {
+fun validatePRType(prBody: String, errorList: MutableList<String>) {
     val prTypeValue = getSectionWithoutHeading(prBody, "PR Type")
     if (prTypeValue == null) {
-        errorBuilder.appendSectionMissing("PR Type")
+        errorList.appendSectionMissing("PR Type")
     } else {
         val selectedPrTypesCount = prTypeValue
             .lines()
@@ -60,15 +47,15 @@ fun validatePRType(prBody: String, errorBuilder: StringBuilder) {
             .size
 
         if (selectedPrTypesCount != 1) {
-            errorBuilder.append("- $selectedPrTypesCount PR type found, expected only 1")
+            errorList.add("$selectedPrTypesCount PR type found, expected only 1")
         }
     }
 }
 
-fun validateMandatoryChecklistItems(prBody: String, errorBuilder: StringBuilder) {
+fun validateMandatoryChecklistItems(prBody: String, errorList: MutableList<String>) {
     val checkListValue = getSectionWithoutHeading(prBody, "Checklist")
     if (checkListValue == null) {
-        errorBuilder.appendSectionMissing("Checklist")
+        errorList.appendSectionMissing("Checklist")
     } else {
         val mandatoryItems = checkListValue
             .lines()
@@ -77,7 +64,7 @@ fun validateMandatoryChecklistItems(prBody: String, errorBuilder: StringBuilder)
 
         for (mandatoryItem in mandatoryItems) {
             if (!mandatoryItem.startsWith("- [x]")) {
-                errorBuilder.append("- Checklist mandatory item not checked properly: ($mandatoryItem)")
+                errorList.add("Checklist mandatory item not checked properly: ($mandatoryItem)")
             }
         }
     }
@@ -143,12 +130,15 @@ fun getPRBodyOrCrash(): String {
     return prBody
 }
 
-fun validateDescription(prBody: String, errorBuilder: StringBuilder) {
+fun validateDescription(prBody: String, errorList: MutableList<String>) {
     val description = getSectionWithoutHeading(prBody, "Description")
     if (description.isNullOrEmpty()) {
-        errorBuilder.appendSectionMissing("Description")
+        errorList.appendSectionMissing("Description")
     } else if (description.startsWith("<!--") && description.endsWith("-->")) {
-        errorBuilder.append("- Description looks empty - ($description)")
+        errorList.add("Description looks empty - ($description)")
     }
 }
 
+fun MutableList<String>.appendSectionMissing(heading: String) {
+    add("'$heading' section is missing from PR body ")
+}
