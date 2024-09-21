@@ -23,7 +23,7 @@ fun main() {
             )
         )
     } else {
-        println("✅ PR body looks good!")
+        println("✅ PR body looks good")
     }
 }
 
