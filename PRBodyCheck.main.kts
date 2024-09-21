@@ -35,7 +35,7 @@ fun getSectionWithoutHeading(prBody: String, heading: String): String? {
 }
 
 fun java.lang.StringBuilder.appendSectionMissing(heading: String): java.lang.StringBuilder {
-    return append("- '$heading' section is missing from PR body\n\n")
+    return append("- '$heading' section is missing from PR body </br>\n")
 }
 
 fun validatePRType(prBody: String, errorBuilder: StringBuilder) {
