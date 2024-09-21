@@ -13,7 +13,8 @@ fun main() {
     validateMandatoryChecklistItems(prBody, errorBuilder)
 
     if (errorBuilder.isNotEmpty()) {
-        error(errorBuilder)
+        println("Failed validation: $errorBuilder")
+        error("PR body check failed. See above ☝\uFE0F")
     } else {
         println("✅ PR body looks good!!!")
     }
