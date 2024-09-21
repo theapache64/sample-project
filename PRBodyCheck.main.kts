@@ -13,8 +13,16 @@ fun main() {
     validateMandatoryChecklistItems(prBody, errorList)
 
     if (errorList.isNotEmpty()) {
-        println(errorList.joinToString(separator = "\n", prefix = "- "))
-        error("PR body check failed. See above ☝\uFE0F")
+        println()
+        error(
+            errorList.joinToString(
+                separator = "\n",
+                prefix = "PR template check failed",
+                transform = { line ->
+                    "${errorList.indexOf(line) + 1} -  $line"
+                }
+            )
+        )
     } else {
         println("✅ PR body looks good!!!")
     }
