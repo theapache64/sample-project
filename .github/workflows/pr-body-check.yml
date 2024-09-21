@@ -14,7 +14,7 @@ jobs:
         with:
           ref: master
 
-      - name: Run custom check
+      - name: Run validation
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: kotlinc -script ./PRBodyCheck.main.kts
