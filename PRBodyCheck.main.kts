@@ -16,7 +16,7 @@ fun main() {
         error(
             errorList.joinToString(
                 separator = "\n",
-                prefix = "PR template check failed. Fix below points please\n",
+                prefix = "PR template check failed. Fix below items please\n",
                 transform = { line ->
                     "- ${line.trim()}"
                 }
@@ -54,7 +54,7 @@ fun validatePRType(prBody: String, errorList: MutableList<String>) {
             .size
 
         if (selectedPrTypesCount != 1) {
-            errorList.add("$selectedPrTypesCount PR types found, expected only 1")
+            errorList.add("$selectedPrTypesCount 'PR types' found, expected only 1")
         }
     }
 }
