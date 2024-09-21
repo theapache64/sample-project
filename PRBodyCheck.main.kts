@@ -13,7 +13,17 @@ fun main() {
     validateMandatoryChecklistItems(prBody, errorBuilder)
 
     if (errorBuilder.isNotEmpty()) {
-        println("Failed validation: $errorBuilder")
+        println("""
+            1
+            2
+            
+            3
+            
+            
+            4
+            
+            .
+        """.trimIndent())
         error("PR body check failed. See above ☝\uFE0F")
     } else {
         println("✅ PR body looks good!!!")
