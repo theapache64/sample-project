@@ -5,14 +5,14 @@ on:
     types: [opened, edited, synchronize]  # Trigger on PR creation and editing
 
 jobs:
-  pr-body-check:
+  validation:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout branch
         uses: actions/checkout@v3
-#        with:
-#          ref: master
+        with:
+          ref: master
 
       - name: Log event action
         run: echo "event type is:" ${{ github.event.action }}
